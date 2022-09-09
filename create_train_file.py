@@ -1,5 +1,6 @@
 # Create training dataset for new user
 import time
+import os
 # from cv2 import *
 from cv2 import (VideoCapture, 
                 imshow, 
@@ -13,14 +14,17 @@ class TrainData():
         self.unique_counter = 0
 
     def add_new_train_data(self, name:str):
+        print("Adding new training data for ", name)
         self.unique_counter+=1
-        path = "dataset/" + str(name).lowercase() + "_" + str(self.unique_counter) + "/"
+        path = "dataset/" + str(name).lower() + "_" + str(self.unique_counter)
         counter = 0
+
+        os.mkdir(path)
 
         cam = VideoCapture(0)
         image_count = 0
         while cam.isOpened() and image_count < 10:
-            image_path = path + "image" + str(counter) + ".png"
+            image_path = path + "/image" + str(counter) + ".png"
             counter+=1
             fail_count = 0
 
@@ -28,14 +32,17 @@ class TrainData():
 
             if not result:
                 fail_count += 1
-                continue
                 if fail_count >= 5:
                     print("Error opening camera")
                     exit()
+                continue
             
             imwrite(image_path, img)
             image_count += 1
             time.sleep(1)
+        
+        cam.release()
+        # destroyAllWindows()
 
 def test_image_capture():
     cam_port = 0   
@@ -59,7 +66,7 @@ def test_image_capture():
     destroyAllWindows()
 
 def test_video_capture():
-    cam = VideoCapture('video_test.avi')
+    cam = VideoCapture(0)
 
     while cam.isOpened():
         ret, frame = cam.read()
@@ -67,10 +74,14 @@ def test_video_capture():
             print("Can not receive frame")
             break
         imshow('video_window', frame)
-        if waitKey(0):
+        if waitKey(1) == ord('q'):
             break
 
     cam.release()
     destroyAllWindows()
 
-test_image_capture()
+train_data = TrainData()
+train_data.add_new_train_data("Rohit")
+print("Done")
+# test_video_capture()
+# test_image_capture()
