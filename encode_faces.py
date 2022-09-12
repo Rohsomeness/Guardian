@@ -9,15 +9,15 @@ import os
 def test_encode_faces(input_args=None):
 	# construct the argument parser and parse the arguments
 	ap = argparse.ArgumentParser()
-	ap.add_argument("-i", "--dataset", required=True,
+	ap.add_argument("-i", "--dataset", required=False,
 		help="path to input directory of faces + images")
-	ap.add_argument("-e", "--encodings", required=True,
+	ap.add_argument("-e", "--encodings", required=False,
 		help="path to serialized db of facial encodings")
 	ap.add_argument("-d", "--detection-method", type=str, default="hog",
 		help="face detection model to use: either `hog` or `cnn`")
 	args = vars(ap.parse_args())
 	if input_args:
-		args = {"detection_method":"hog", "encodings":"encodings.pickle", "cascade":"haarcascade_frontalface_default.xml"}
+		args = {"dataset":"dataset", "detection_method":"hog", "encodings":"encodings.pickle", "cascade":"haarcascade_frontalface_default.xml"}
 
 	# grab the paths to the input images in our dataset
 	print("[INFO] quantifying faces...")
@@ -62,4 +62,4 @@ def test_encode_faces(input_args=None):
 	f.write(pickle.dumps(data))
 	f.close()
 
-# test_encode_faces()
+test_encode_faces(input_args=True)

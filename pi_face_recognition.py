@@ -134,9 +134,9 @@ def pi_face_recognition(visualize=False, phrases_dict={}):
 def test_pi_face_recognition(input_args=None):
 	# construct the argument parser and parse the arguments
 	ap = argparse.ArgumentParser()
-	ap.add_argument("-c", "--cascade", required=True,
+	ap.add_argument("-c", "--cascade", required=False,
 		help = "path to where the face cascade resides")
-	ap.add_argument("-e", "--encodings", required=True,
+	ap.add_argument("-e", "--encodings", required=False,
 		help="path to serialized db of facial encodings")
 	args = vars(ap.parse_args())
 	if input_args:
@@ -242,4 +242,4 @@ def test_pi_face_recognition(input_args=None):
 
 # speak = Dispatch("SAPI.SpVoice").Speak
 # speak("Hi Yamini and Adhi thee")
-# test_pi_face_recognition()
+test_pi_face_recognition(input_args=True)
