@@ -21,7 +21,7 @@ class TrainData():
         print("Adding new training data for ", name)
         self.phrases_dict[name] = [("Hi " + name)]
         for phrase in phrases:
-            self.phrases_dict.append(phrase)
+            self.phrases_dict[name].append(phrase)
         self.unique_counter+=1
 
         if take_pics:
@@ -51,6 +51,7 @@ class TrainData():
                 time.sleep(1)
             
             cam.release()
+        self.store_phrases_dict()
         # destroyAllWindows()
     
     def store_phrases_dict(self, path:str="phrases_dict.pickle"):
@@ -109,8 +110,37 @@ def test_video_capture():
     cam.release()
     destroyAllWindows()
 
-# train_data = TrainData()
-# train_data.add_new_train_data("Rohit")
-# print("Done")
-# test_video_capture()
-# test_image_capture()
+# main
+if __name__ == "__main__":
+    train_data = TrainData()
+    # train_data.add_new_train_data(
+    #     name="Oscar",
+    #     phrases=[
+    #         "Adolf says hi",
+    #         "No Mossad agents are allowed in the house",
+    #         "You must posses a foreskin to enter",
+    #         "Us cah",
+    #         "Isn't it past your bedtime?",
+    #         "Must be below 30 years old to enter"
+    #     ],
+    #     take_pics=False,
+    # )
+    # train_data.add_new_train_data(
+    #     name="Anish",
+    #     phrases=[
+    #         "Can you please play Wukong now",
+    #         "Must be above 5 foot to enter this household",
+    #         "Please make green tea shots",
+    #         "Must be below 30 years old to enter"
+    #     ],
+    #     take_pics=False,
+    # )
+    # train_data.phrases_dict["oscar"] = train_data.phrases_dict["Oscar"]
+    # train_data.phrases_dict["anish"] = train_data.phrases_dict["Anish"]
+    # del train_data.phrases_dict["Oscar"]
+    # del train_data.phrases_dict["Anish"]
+    # train_data.store_phrases_dict()
+    print(train_data.phrases_dict["anish"])
+    print("Done")
+    # test_video_capture()
+    # test_image_capture()

@@ -11,7 +11,7 @@ from win32com.client import Dispatch
 from random import randint
 import time
 
-def pi_face_recognition(visualize=False, phrases_dict={}):
+def pi_face_recognition(visualize=False, phrases_dict={}, print_phrases=False):
 	# construct the argument parser and parse the arguments
 	# ap = argparse.ArgumentParser()
 	# ap.add_argument("-c", "--cascade", required=True,
@@ -22,7 +22,8 @@ def pi_face_recognition(visualize=False, phrases_dict={}):
 	
 	args = {"cascade":"haarcascade_frontalface_default.xml", "encodings":"encodings.pickle"}
 
-	speak = Dispatch("SAPI.SpVoice").Speak
+	if not print_phrases:
+		speak = Dispatch("SAPI.SpVoice").Speak
 	# load the known faces and embeddings along with OpenCV's Haar
 	# cascade for face detection
 	print("[INFO] loading encodings + face detector...")
@@ -106,8 +107,10 @@ def pi_face_recognition(visualize=False, phrases_dict={}):
 		
 		for n in names:
 			if n in phrases_dict:
-				# print(phrases_dict[n][randint(0, len(phrases_dict[n])-1)])
-				speak(phrases_dict[n][randint(0, len(phrases_dict[n])-1)])
+				if print_phrases:
+					print(phrases_dict[n][randint(0, len(phrases_dict[n])-1)])
+				else:
+					speak(phrases_dict[n][randint(0, len(phrases_dict[n])-1)])
 				time.sleep(1)
 
 
