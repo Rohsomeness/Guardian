@@ -1,17 +1,20 @@
-# Create training dataset for new user
+# pylint: disable=E0611, R1722, W0719
+"""Create training data for the model"""
 import time
 import os
 from typing import List
 import pickle
 # from cv2 import *
-from cv2 import (VideoCapture, 
-                imshow, 
-                imwrite, 
-                waitKey, 
-                destroyWindow, 
+from cv2 import (VideoCapture,
+                imshow,
+                imwrite,
+                waitKey,
+                destroyWindow,
                 destroyAllWindows)
 
 class TrainData():
+    """Class for training data"""
+
     def __init__(self, phrases_dict_path="phrases_dict.pickle"):
         """Init class and load phrases dict from file"""
         self.unique_counter = 0
@@ -48,14 +51,14 @@ class TrainData():
                         print("Error opening camera")
                         exit()
                     continue
-                
+
                 imwrite(image_path, img)
                 image_count += 1
                 time.sleep(1)
-            
+
             cam.release()
             destroyAllWindows()
-    
+
     def store_phrases_dict(self, path:str="phrases_dict.pickle"):
         """Write phrases dict to file"""
         with open(path, 'wb') as f:
@@ -68,19 +71,21 @@ class TrainData():
                 pickle.dump({}, f)
         with open(path, 'rb') as f:
             self.phrases_dict = pickle.load(f)
-        
+
     def add_phrases(self, name: str, phrases: list[str]):
         """Add phrases for existing name"""
         if name not in self.phrases_dict:
             raise Exception("name not recognized")
         self.phrases_dict[name] += phrases
         self.store_phrases_dict()
-    
+
     def set_unique_counter(self, num=9):
+        """Set counter, useful for if adding images through camera"""
         self.unique_counter = num
 
 def test_image_capture():
-    cam_port = 0   
+    """Test image capture"""
+    cam_port = 0
     cam = VideoCapture(cam_port)
 
     if not cam.isOpened():
@@ -96,11 +101,12 @@ def test_image_capture():
         destroyWindow("ImCapWindow")
     else:
         print("Error capturing image")
-    
+
     cam.release()
     destroyAllWindows()
 
 def test_video_capture():
+    """Test video capture"""
     cam = VideoCapture(0)
 
     while cam.isOpened():

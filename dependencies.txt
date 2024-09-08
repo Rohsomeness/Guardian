@@ -3,3 +3,4 @@ dlib
 face_recognition
 imutils
 pypiwin
+pylint

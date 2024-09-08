@@ -1,6 +1,8 @@
-# from create_train_file import TrainData
-from win32com.client import Dispatch
+# pylint: disable=C0301
+"""Initial population of phrases dict"""
 import pickle
+
+from win32com.client import Dispatch
 
 phrases_dict = {"sahil":["When I want a manfriend, I'll let you know", "This candle smells like fire!", "Someone's been feeding the beast a little too much lately", \
                          "When I want a manfriend, I'll let you know", "This candle smells like fire!", "Someone's been feeding the beast a little too much lately", \

@@ -1,17 +1,21 @@
-# import the necessary packages
-from imutils.video import VideoStream
-from imutils.video import FPS
-import face_recognition
+# pylint: disable=W0311, E1101, R0914, R0912, R0915, R1732
+"""Run facial recognition for Raspberry Pi using OpenCV and face_recognition library."""
 import argparse
-import imutils
 import pickle
 import time
-import cv2
-from win32com.client import Dispatch
 from random import randint
-import time
 
-def pi_face_recognition(visualize=False, phrases_dict={}, print_phrases=False):
+import cv2
+import face_recognition
+import imutils
+from imutils.video import FPS, VideoStream
+from win32com.client import Dispatch
+
+
+def pi_face_recognition(visualize=False, phrases_dict=None, print_phrases=False):
+	"""Run facial recognition for Raspberry Pi using OpenCV and face_recognition library."""
+	if phrases_dict is None:
+		phrases_dict = {}
 	# construct the argument parser and parse the arguments
 	# ap = argparse.ArgumentParser()
 	# ap.add_argument("-c", "--cascade", required=True,
@@ -19,9 +23,9 @@ def pi_face_recognition(visualize=False, phrases_dict={}, print_phrases=False):
 	# ap.add_argument("-e", "--encodings", required=True,
 	# 	help="path to serialized db of facial encodings")
 	# args = vars(ap.parse_args())
-	
 	args = {"cascade":"haarcascade_frontalface_default.xml", "encodings":"encodings.pickle"}
 
+	speak = None
 	if not print_phrases:
 		speak = Dispatch("SAPI.SpVoice").Speak
 	# load the known faces and embeddings along with OpenCV's Haar
@@ -46,16 +50,16 @@ def pi_face_recognition(visualize=False, phrases_dict={}, print_phrases=False):
 		# to 500px (to speedup processing)
 		frame = vs.read()
 		frame = imutils.resize(frame, width=500)
-		
+
 		# convert the input frame from (1) BGR to grayscale (for face
 		# detection) and (2) from BGR to RGB (for face recognition)
 		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 		# detect faces in the grayscale frame
-		rects = detector.detectMultiScale(gray, scaleFactor=1.1, 
+		rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 			minNeighbors=5, minSize=(30, 30))
-		
+
 		# OpenCV returns bounding box coordinates in (x, y, w, h) order
 		# but we need them in (top, right, bottom, left) order, so we
 		# need to do a bit of reordering
@@ -78,12 +82,12 @@ def pi_face_recognition(visualize=False, phrases_dict={}, print_phrases=False):
 				# find the indexes of all matched faces then initialize a
 				# dictionary to count the total number of times each face
 				# was matched
-				matchedIdxs = [i for (i, b) in enumerate(matches) if b]
+				matched_idxs = [i for (i, b) in enumerate(matches) if b]
 				counts = {}
 
 				# loop over the matched indexes and maintain a count for
 				# each recognized face face
-				for i in matchedIdxs:
+				for i in matched_idxs:
 					name = data["names"][i]
 					counts[name] = counts.get(name, 0) + 1
 
@@ -91,7 +95,7 @@ def pi_face_recognition(visualize=False, phrases_dict={}, print_phrases=False):
 				# of votes (note: in the event of an unlikely tie Python
 				# will select first entry in the dictionary)
 				name = max(counts, key=counts.get)
-			
+
 			# update the list of names
 			names.append(name)
 
@@ -104,7 +108,7 @@ def pi_face_recognition(visualize=False, phrases_dict={}, print_phrases=False):
 				y = top - 15 if top - 15 > 15 else top + 15
 				cv2.putText(frame, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
 					0.75, (0, 255, 0), 2)
-		
+
 		for n in names:
 			if n in phrases_dict:
 				if print_phrases:
@@ -128,13 +132,14 @@ def pi_face_recognition(visualize=False, phrases_dict={}, print_phrases=False):
 
 	# stop the timer and display FPS information
 	fps.stop()
-	print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-	print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+	print(f"[INFO] elasped time: {fps.elapsed():.2f}")
+	print(f"[INFO] approx. FPS: {fps.fps():.2f}")
 	# do a bit of cleanup
 	cv2.destroyAllWindows()
 	vs.stop()
 
 def test_pi_face_recognition(input_args=None):
+	"""Test facial recognition for Raspberry Pi using OpenCV and face_recognition library."""
 	# construct the argument parser and parse the arguments
 	ap = argparse.ArgumentParser()
 	ap.add_argument("-c", "--cascade", required=False,
@@ -166,16 +171,16 @@ def test_pi_face_recognition(input_args=None):
 		# to 500px (to speedup processing)
 		frame = vs.read()
 		frame = imutils.resize(frame, width=500)
-		
+
 		# convert the input frame from (1) BGR to grayscale (for face
 		# detection) and (2) from BGR to RGB (for face recognition)
 		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 		# detect faces in the grayscale frame
-		rects = detector.detectMultiScale(gray, scaleFactor=1.1, 
+		rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 			minNeighbors=5, minSize=(30, 30))
-		
+
 		# OpenCV returns bounding box coordinates in (x, y, w, h) order
 		# but we need them in (top, right, bottom, left) order, so we
 		# need to do a bit of reordering
@@ -198,12 +203,12 @@ def test_pi_face_recognition(input_args=None):
 				# find the indexes of all matched faces then initialize a
 				# dictionary to count the total number of times each face
 				# was matched
-				matchedIdxs = [i for (i, b) in enumerate(matches) if b]
+				matched_idxs = [i for (i, b) in enumerate(matches) if b]
 				counts = {}
 
 				# loop over the matched indexes and maintain a count for
 				# each recognized face face
-				for i in matchedIdxs:
+				for i in matched_idxs:
 					name = data["names"][i]
 					counts[name] = counts.get(name, 0) + 1
 
@@ -211,7 +216,7 @@ def test_pi_face_recognition(input_args=None):
 				# of votes (note: in the event of an unlikely tie Python
 				# will select first entry in the dictionary)
 				name = max(counts, key=counts.get)
-			
+
 			# update the list of names
 			names.append(name)
 
@@ -237,8 +242,8 @@ def test_pi_face_recognition(input_args=None):
 
 	# stop the timer and display FPS information
 	fps.stop()
-	print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-	print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+	print(f"[INFO] elasped time: {fps.elapsed():.2f}")
+	print(f"[INFO] approx. FPS: {fps.fps():.2f}")
 	# do a bit of cleanup
 	cv2.destroyAllWindows()
 	vs.stop()

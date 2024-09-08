@@ -1,3 +1,4 @@
+"""Main file for the Guardian project"""
 import argparse
 from pi_face_recognition import pi_face_recognition
 from create_train_file import TrainData
@@ -13,7 +14,7 @@ if __name__ == "__main__":
     # make another store true argument for printing the phrases
     ap.add_argument("-p", "--print_phrases", action="store_true",
         help="print the phrases")
-    
+
     # parse the arguments
     args = vars(ap.parse_args())
 
@@ -26,5 +27,3 @@ if __name__ == "__main__":
         print_phrases = args["print_phrases"],
         phrases_dict=data.phrases_dict
     )
-
-    
