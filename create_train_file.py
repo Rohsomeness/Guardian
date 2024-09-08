@@ -13,16 +13,19 @@ from cv2 import (VideoCapture,
 
 class TrainData():
     def __init__(self, phrases_dict_path="phrases_dict.pickle"):
+        """Init class and load phrases dict from file"""
         self.unique_counter = 0
         self.phrases_dict = {}
         self.load_phrases_dict(phrases_dict_path)
 
     def add_new_train_data(self, name:str, phrases:List[str]=None, take_pics=False):
+        """Add new training data for name and provided phrases"""
         print("Adding new training data for ", name)
         self.phrases_dict[name] = [("Hi " + name)]
         for phrase in phrases:
             self.phrases_dict[name].append(phrase)
         self.unique_counter+=1
+        self.store_phrases_dict()
 
         if take_pics:
             path = "dataset/" + str(name).lower() + "_" + str(self.unique_counter)
@@ -51,27 +54,29 @@ class TrainData():
                 time.sleep(1)
             
             cam.release()
-        self.store_phrases_dict()
-        # destroyAllWindows()
+            destroyAllWindows()
     
     def store_phrases_dict(self, path:str="phrases_dict.pickle"):
+        """Write phrases dict to file"""
         with open(path, 'wb') as f:
             pickle.dump(self.phrases_dict, f)
 
     def load_phrases_dict(self, path:str="phrases_dict.pickle"):
+        """Read phrases dict from file"""
         if not os.path.isfile(path):
             with open(path, 'rb') as f:
                 pickle.dump({}, f)
         with open(path, 'rb') as f:
             self.phrases_dict = pickle.load(f)
         
-    def add_phrases(self, name, phrases):
+    def add_phrases(self, name: str, phrases: list[str]):
+        """Add phrases for existing name"""
         if name not in self.phrases_dict:
             raise Exception("name not recognized")
-        self.phrases_dict[name].append(phrases)
+        self.phrases_dict[name] += phrases
         self.store_phrases_dict()
     
-    def set_unique_counter(self, num=7):
+    def set_unique_counter(self, num=9):
         self.unique_counter = num
 
 def test_image_capture():
@@ -110,37 +115,25 @@ def test_video_capture():
     cam.release()
     destroyAllWindows()
 
-# main
 if __name__ == "__main__":
     train_data = TrainData()
+
+
+    # Example usage of adding new training data:
     # train_data.add_new_train_data(
-    #     name="Oscar",
+    #     name="example_name",
     #     phrases=[
-    #         "Adolf says hi",
-    #         "No Mossad agents are allowed in the house",
-    #         "You must posses a foreskin to enter",
-    #         "Us cah",
-    #         "Isn't it past your bedtime?",
-    #         "Must be below 30 years old to enter"
+    #         "example phrase 1",
+    #         "example phrase 2"
     #     ],
     #     take_pics=False,
     # )
-    # train_data.add_new_train_data(
-    #     name="Anish",
-    #     phrases=[
-    #         "Can you please play Wukong now",
-    #         "Must be above 5 foot to enter this household",
-    #         "Please make green tea shots",
-    #         "Must be below 30 years old to enter"
-    #     ],
-    #     take_pics=False,
+
+    # Example usage of adding phrases for existing name:
+    # train_data.add_phrases(
+    #     name="example_name",
+    #     phrases=["example phrase 3", "example phrase 4"]
     # )
-    # train_data.phrases_dict["oscar"] = train_data.phrases_dict["Oscar"]
-    # train_data.phrases_dict["anish"] = train_data.phrases_dict["Anish"]
-    # del train_data.phrases_dict["Oscar"]
-    # del train_data.phrases_dict["Anish"]
-    # train_data.store_phrases_dict()
-    print(train_data.phrases_dict["anish"])
+
+    print(train_data.phrases_dict.keys())
     print("Done")
-    # test_video_capture()
-    # test_image_capture()

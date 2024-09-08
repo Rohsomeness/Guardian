@@ -3,7 +3,7 @@ Smart manager that uses facial id to recognize and say phrases depending on who 
 
 
 ## How to use:
-Make venv using requirements.txt. Run guardian.py, setting visualize to True if you want visual output and false otherwise like so:
+Make venv using `dependencies.txt`. Run `guardian.py`, setting visualize to True if you want visual output and false otherwise like so:
 
 `python guardian.py -v -p`
 
