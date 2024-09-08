@@ -1,4 +1,4 @@
-# pylint: disable=C0301
+# pylint: disable=C0301, E0401
 """Initial population of phrases dict"""
 import pickle
 

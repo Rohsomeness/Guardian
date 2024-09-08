@@ -1,4 +1,4 @@
-# pylint: disable=E1101, W0311, R0914
+# pylint: disable=E1101, W0311, R0914, E0401
 """Encode faces in images and save them to a pickle file"""
 import argparse
 import os

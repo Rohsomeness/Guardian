@@ -1,4 +1,4 @@
-# pylint: disable=E0611, R1722, W0719
+# pylint: disable=E0611, R1722, W0719, E0401
 """Create training data for the model"""
 import time
 import os
@@ -72,7 +72,7 @@ class TrainData():
         with open(path, 'rb') as f:
             self.phrases_dict = pickle.load(f)
 
-    def add_phrases(self, name: str, phrases: list[str]):
+    def add_phrases(self, name: str, phrases: List[str]):
         """Add phrases for existing name"""
         if name not in self.phrases_dict:
             raise Exception("name not recognized")
