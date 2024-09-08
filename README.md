@@ -1,5 +1,8 @@
 # Guardian
-Smart manager that uses facial id to recognize and say phrases depending on who enters field of view of camera. Light-weight model that can run on-device.  
+
+![Guardian Logo](img/guardian_logo.jfif)
+
+Smart manager that uses facial id to recognize and say phrases depending on who enters field of view of camera. Light-weight model that can run on a raspberry pi.  
 
 
 ## How to use:
