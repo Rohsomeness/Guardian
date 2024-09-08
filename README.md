@@ -1,5 +1,6 @@
 # Guardian
-Smart manager for who enters apartment
+Smart manager that uses facial id to recognize and say phrases depending on who enters field of view of camera. Light-weight model that can run on-device.  
+
 
 ## How to use:
 Make venv using requirements.txt. Run guardian.py, setting visualize to True if you want visual output and false otherwise like so:
