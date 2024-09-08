@@ -1,4 +1,4 @@
-# pylint: disable=W0311, E1101, R0914, R0912, R0915, R1732
+# pylint: disable=W0311, E1101, R0914, R0912, R0915, R1732, E0401
 """Run facial recognition for Raspberry Pi using OpenCV and face_recognition library."""
 import argparse
 import pickle
